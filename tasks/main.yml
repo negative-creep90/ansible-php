@@ -1,0 +1,41 @@
+---
+- name: required packages
+  apt:
+    name: "{{php_required_packages}}"
+
+- name: apt key add
+  apt_key:
+    url: https://packages.sury.org/php/apt.gpg
+    state: present
+
+- name: add repository
+  apt_repository:
+    repo: "deb https://packages.sury.org/php/ {{ansible_distribution_release}} main"
+    state: present
+    filename: php
+
+- set_fact:
+    php_packages: '{{php_core_packages+php_extra_packages}}'
+  tags: php_packages
+
+- name: install php packages
+  apt:
+    pkg: "{{php_packages}}"
+    update_cache: "yes"
+    cache_valid_time: "3600"
+    install_recommends: "no"
+
+- set_fact:
+    php_extentions: "{{php_core_extentions + php_user_extentions}}"
+
+- name: configure extentions
+  template:
+    src: "extention.ini.j2"
+    dest: "{{php_extentions_path}}/{{item.name}}.ini"
+  loop: "{{php_extentions}}"
+  when: item.state|default('enabled') != 'disabled'
+
+- include: php_cli_settings.yml
+
+- include: php_fpm_settings.yml
+  when: php_enable_fpm

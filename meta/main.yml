@@ -1,0 +1,18 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: negative_creep90
+  description: php installation for Debian.
+  min_ansible_version: 2.4
+  platforms:
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
+  galaxy_tags:
+    - web
+    - php-fpm

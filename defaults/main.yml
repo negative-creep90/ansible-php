@@ -1,0 +1,179 @@
+---
+php_required_packages:
+  - ca-certificates
+  - apt-transport-https
+
+php_core_extentions:
+  - name: pdo
+  - name: mysqlnd
+  - name: opcache
+    type: zend
+  - name: calendar
+  - name: ctype
+  - name: exif
+  - name: fileinfo
+  - name: ftp
+  - name: gettext
+  - name: iconv
+  - name: json
+  - name: phar
+  - name: posix
+  - name: readline
+  - name: shmop
+  - name: sockets
+  - name: sysvmsg
+  - name: sysvsem
+  - name: sysvshm
+  - name: tokenizer
+  - name: zip
+  - name: intl
+
+
+php_version: '7.2'
+php_config_dir: "/etc/php/{{php_version}}"
+php_logdir: /var/log/php
+php_fpm_slow_log: "{{php_logdir}}/php-slow.log"
+php_cli_extentions_path: "{{php_config_dir}}/cli/conf.d"
+php_extentions_path: "{{php_config_dir}}/mods-available"
+php_core_packages:
+  - "php{{php_version}}"
+  - "php{{php_version}}-dev"
+  - "php{{php_version}}-cli"
+  - "php{{php_version}}-common"
+  - "php{{php_version}}-fpm"
+  - "php{{php_version}}-json"
+  - "php{{php_version}}-opcache"
+  - "php{{php_version}}-readline"
+
+php_user_extentions: []
+
+php_extra_packages: []
+
+php_pecl_modules: []
+
+php_enable_fpm: False
+
+php_fpm_pools_delete: []
+php_fpm_extentions_path: "{{php_config_dir}}/fpm/conf.d"
+php_fpm_pools_dir: "{{php_config_dir}}/fpm/pool.d"
+php_fpm_pid: "/run/php/php{{php_version}}-fpm.pid"
+
+
+php_fpm_pools:
+  - name: www
+    pool_settings:
+      user: www-data
+      group: www-data
+      listen.owner: www-data
+      listen.group: www-data
+      listen.mode: 660
+      listen: /var/run/php/php-fpm.sock
+      pm: dynamic
+      pm.max_children: 5
+      pm.start_servers: 2
+      pm.min_spare_servers: 1
+      pm.max_spare_servers: 3
+      pm.process_idle_timeout: 10s
+      pm.max_requests: 500
+      clear_env: on
+
+php_defaul_extentions:
+  - name: pdo
+    priority: 10
+#  - name: propro
+#    priority: 20
+#  - name: raphf
+#    priority: 20
+#  - name: pecl-http
+#    priority: 30
+  - name: opcache
+    priority: 10
+    type: zend
+  - name: xml
+    priority: 15
+  - name: calendar
+    priority: 20
+  - name: ctype
+    priority: 20
+  - name: dom
+    priority: 20
+  - name: exif
+    priority: 20
+  - name: fileinfo
+    priority: 20
+  - name: ftp
+    priority: 20
+  - name: gettext
+    priority: 20
+  - name: iconv
+    priority: 20
+  - name: json
+    priority: 20
+  - name: phar
+    priority: 20
+  - name: posix
+    priority: 20
+  - name: readline
+    priority: 20
+  - name: shmop
+    priority: 20
+  - name: simplexml
+    priority: 20
+  - name: sockets
+    priority: 20
+  - name: sysvmsg
+    priority: 20
+  - name: sysvsem
+    priority: 20
+  - name: sysvshm
+    priority: 20
+  - name: tokenizer
+    priority: 20
+  - name: wddx
+    priority: 20
+  - name: xdebug
+    priority: 20
+    type: zend
+  - name: xmlreader
+    priority: 20
+  - name: xmlwriter
+    priority: 20
+  - name: xsl
+    priority: 20
+
+php_ini_settings:
+  engine: 'On'
+  short_open_tag: 'Off'
+  precision: '14'
+  output_buffering: '4096'
+  zlib.output_compression: 'Off'
+  implicit_flush: 'Off'
+  unserialize_callback_func: ""
+  serialize_precision: 17
+  disable_functions: ""
+  #disable_classes: "pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority"
+  disable_classes: ""
+  zend.enable_gc: 'On'
+  expose_php: 'Off'
+  max_execution_time: '30'
+  max_input_time: '60'
+  memory_limit: '128M'
+  error_reporting: 'E_ALL & ~E_DEPRECATED & ~E_STRICT'
+  display_errors: 'Off'
+  display_startup_errors: 'Off'
+  log_errors: 'On'
+  log_errors_max_len: '1024'
+  ignore_repeated_errors: 'Off'
+  ignore_repeated_source: 'Off'
+  report_memleaks: 'On'
+  track_errors: 'Off'
+  html_errors: 'On'
+  variables_order: '"GPCS"'
+  request_order: '"GP"'
+  register_argc_argv: 'Off'
+  auto_globals_jit: 'On'
+  post_max_size: '8M'
+  auto_prepend_file: ""
+  auto_append_file: ""
+  default_mimetype: '"text/html"'
+  session.gc_probability: "0"

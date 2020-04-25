@@ -1,0 +1,38 @@
+- name: configure php fpm
+  template:
+    src: "{{item.source}}"
+    dest: "{{item.dest}}"
+  loop:
+    - { source: php.ini.j2, dest: "{{php_config_dir}}/fpm/php.ini" }
+    - { source: php-fpm.conf.j2, dest: "{{php_config_dir}}/fpm/php-fpm.conf" }
+  notify: restart php-fpm
+
+- name: php_pools_delete
+  file:
+    dest: "{{php_fpm_pools_dir}}/{{item}}.conf"
+    state: absent
+  loop: "{{php_fpm_pools_delete}}"
+  notify: restart php-fpm
+
+- name: configure php pools
+  template:
+    src: php_fpm_pool.conf.j2
+    dest: "{{php_fpm_pools_dir}}/{{item['name']}}.conf"
+  loop: "{{php_fpm_pools}}"
+  notify: restart php-fpm
+
+- name: enable php-fpm extentions
+  shell: "phpenmod -v -s fpm {{item.name}} {{item.name}}"
+  args:
+    creates: "{{php_fpm_extentions_path}}/*-{{item.name}}.ini"
+  when: "item.state|default('enabled') != 'disabled'"
+  loop: "{{php_extentions}}"
+  notify: restart php-fpm
+
+- name: disable php-fpm extentions
+  shell: "phpdismod -v {{php_version}} -s cli {{item.name}} {{item.name}}"
+  args:
+    removes: "{{php_fpm_extentions_path}}/*-{{item.name}}.ini"
+  when: item.state|default('enabled') == 'disabled'
+  loop: "{{php_extentions}}"
+  notify: restart php-fpm

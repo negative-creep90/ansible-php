@@ -1,0 +1,13 @@
+;#{{ ansible_managed }}
+
+[{{item.name}}]
+
+{% for key, value in  item.pool_settings.items() %}
+{{ key }} = {{ value }}
+{% endfor %}
+
+{% if item.pool_environments is defined %}
+{% for key, value in  item.pool_environments.items() %}
+{{ key }} = {{ value }}
+{% endfor %}
+{% endif %}

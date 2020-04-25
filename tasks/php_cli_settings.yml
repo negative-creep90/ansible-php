@@ -1,0 +1,19 @@
+- name: enable php cli extentions
+  shell: "phpenmod -v {{php_version}} -s cli {{item.name}} {{item.name}}"
+  args:
+    creates: "{{php_cli_extentions_path}}/*-{{item.name}}.ini"
+  when: "item.state|default('enabled') != 'disabled'"
+  loop: "{{php_extentions}}"
+
+- name: disable php cli extentions
+  shell: "phpdismod -v {{php_version}} -s cli {{item.name}} {{item.name}}"
+  args:
+    removes: "{{php_cli_extentions_path}}/*-{{item.name}}.ini"
+  when: item.state|default('enabled') == 'disabled'
+  loop: "{{php_extentions}}"
+
+- name: configure php cli
+  template:
+    src: php.ini.j2
+    dest: "{{php_config_dir}}/cli/php.ini"
+  tags: php

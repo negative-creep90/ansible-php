@@ -1,0 +1,13 @@
+; #{{ ansible_managed }}
+
+{% if item.type is defined and item.type|lower == 'zend' %}
+zend_extension={{ item.name }}.so
+{% else %}
+extension={{ item.name }}.so
+{% endif %}
+
+{% if item.settings is defined %}
+{% for setting in item.settings %}
+{{ setting }}
+{% endfor %}
+{% endif %}
