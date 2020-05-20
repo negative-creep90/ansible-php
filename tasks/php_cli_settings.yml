@@ -12,8 +12,10 @@
   when: item.state|default('enabled') == 'disabled'
   loop: "{{php_extentions}}"
 
+- set_fact:
+    php_ini_settings: "{{php_ini_default_settings|combine(php_ini_cli_user_settings)}}"
+
 - name: configure php cli
   template:
     src: php.ini.j2
     dest: "{{php_config_dir}}/cli/php.ini"
-  tags: php

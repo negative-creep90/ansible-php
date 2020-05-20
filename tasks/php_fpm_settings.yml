@@ -1,3 +1,6 @@
+- set_fact:
+    php_ini_settings: "{{php_ini_default_settings|combine(php_ini_fpm_user_settings)}}"
+
 - name: configure php fpm
   template:
     src: "{{item.source}}"

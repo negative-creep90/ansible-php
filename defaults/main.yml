@@ -141,7 +141,7 @@ php_defaul_extentions:
   - name: xsl
     priority: 20
 
-php_ini_settings:
+php_ini_default_settings:
   engine: 'On'
   short_open_tag: 'Off'
   precision: '14'
@@ -177,3 +177,6 @@ php_ini_settings:
   auto_append_file: ""
   default_mimetype: '"text/html"'
   session.gc_probability: "0"
+
+php_ini_cli_user_settings: {}
+php_ini_fpm_user_settings: {}

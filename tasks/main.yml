@@ -38,4 +38,4 @@
 - include: php_cli_settings.yml
 
 - include: php_fpm_settings.yml
-  when: php_enable_fpm
+  when: php_enable_fpm|bool
